@@ -9,7 +9,7 @@ variables:
   webAppName: 'fhc-uks-dev-fluid-web-01'
 
   # Agent VM image name
-  pool: 'AIH Shared'
+  vmImageName: 'AIH Shared'
 
   # Environment name
   environmentName: 'fhc-uks-dev-fluid-web-01'
