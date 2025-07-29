@@ -9,7 +9,7 @@ variables:
   webAppName: 'fhc-uks-dev-fluid-web-01'
 
   # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+  pool: 'AIH Shared'
 
   # Environment name
   environmentName: 'fhc-uks-dev-fluid-web-01'
@@ -17,7 +17,7 @@ variables:
   # Project root folder. Point to the folder containing manage.py file.
   projectRoot: $(System.DefaultWorkingDirectory)
 
-  pythonVersion: '3.11'
+  pythonVersion: '3.12'
 
 stages:
 - stage: Build
