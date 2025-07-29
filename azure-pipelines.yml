@@ -3,7 +3,7 @@ trigger:
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
-  azureServiceConnectionId: '3d35e79d-cfba-49db-85aa-108e0266ecdb'
+  azureServiceConnectionId: 'Flux-NONPROD'
 
   # Web app name
   webAppName: 'fhc-uks-dev-fluid-web-01'
