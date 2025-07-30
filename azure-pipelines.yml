@@ -20,7 +20,7 @@ variables:
 
   resourceGroupName: 'fhc-uks-dev-fluid-rg'
 
-  pythonVersion: '3.11'
+  pythonVersion: '3.12'
 
 stages:
 - stage: Build
