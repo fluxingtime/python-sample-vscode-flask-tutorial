@@ -84,7 +84,7 @@ stages:
                 [
                   {
                     "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
-                    "value": flase,
+                    "value": false,
                     "slotSetting": false
                   }
                 ]
