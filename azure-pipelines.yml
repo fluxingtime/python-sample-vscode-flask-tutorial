@@ -17,7 +17,9 @@ variables:
   # Project root folder. Point to the folder containing manage.py file.
   projectRoot: $(System.DefaultWorkingDirectory)
 
-  pythonVersion: '3.12'
+  resourceGroupName: 'fhc-uks-dev-fluid-rg'
+
+  pythonVersion: '3.11'
 
 stages:
 - stage: Build
@@ -56,6 +58,7 @@ stages:
   displayName: 'Deploy Web App'
   dependsOn: Build
   condition: succeeded()
+  pool: AIH Shared
   jobs:
   - deployment: DeploymentJob
     environment: $(environmentName)
@@ -67,7 +70,22 @@ stages:
           - task: UsePythonVersion@0
             inputs:
               versionSpec: '$(pythonVersion)'
-            displayName: 'Use Python version'
+            displayName: 'Use Python version $(pythonVersion)'
+
+          - task: AzureAppServiceSettings@1
+            displayName: Update App Service Settings
+            inputs:
+              azureSubscription: $(azureServiceConnectionId)
+              resourceGroupName: $(resourceGroupName)
+              appName: $(webAppName)
+              appSettings: |
+                [
+                  {
+                    "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+                    "value": true,
+                    "slotSetting": false
+                  }
+                ]
 
           - task: AzureWebApp@1
             displayName: 'Deploy Azure Web App : $(webAppName)'
@@ -76,4 +94,4 @@ stages:
               appName: $(webAppName)
               appType: webAppLinux
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-              startUpCommand: flask --app startup run -p 8080
+              startUpCommand: gunicorn -b 0.0.0.0 startup:app
