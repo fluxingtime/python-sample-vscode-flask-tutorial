@@ -2,6 +2,7 @@ trigger:
 - main
 
 variables:
+  vmImageName: 'ubuntu-latest'
   # Azure Resource Manager connection created during pipeline creation
   azureServiceConnectionId: 'Flux-NONPROD'
 
@@ -58,7 +59,7 @@ stages:
   displayName: 'Deploy Web App'
   dependsOn: Build
   condition: succeeded()
-  pool: AIH Shared
+  pool: $(vmImageName)
   jobs:
   - deployment: DeploymentJob
     environment: $(environmentName)
