@@ -59,7 +59,8 @@ stages:
   displayName: 'Deploy Web App'
   dependsOn: Build
   condition: succeeded()
-  pool: $(vmImageName)
+  pool: 
+    vmImage: $(vmImageName)
   jobs:
   - deployment: DeploymentJob
     environment: $(environmentName)
