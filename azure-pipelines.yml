@@ -9,9 +9,6 @@ variables:
   # Web app name
   webAppName: 'fhc-uks-dev-fluid-web-01'
 
-  # Agent VM image name
-  pool: 'AIH Shared'
-
   # Environment name
   environmentName: 'fhc-uks-dev-fluid-web-01'
 
@@ -22,11 +19,14 @@ variables:
 
   pythonVersion: '3.12'
 
+
 stages:
 - stage: Build
   displayName: Build stage
   jobs:
   - job: BuildJob
+    pool:
+      vmImage: $(vmImageName)
     steps:
     - task: UsePythonVersion@0
       inputs:
@@ -37,7 +37,7 @@ stages:
         python -m venv antenv
         source antenv/bin/activate
         python -m pip install --upgrade pip
-        pip install setuptools
+        pip install setup
         pip install -r requirements.txt
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
@@ -59,10 +59,10 @@ stages:
   displayName: 'Deploy Web App'
   dependsOn: Build
   condition: succeeded()
-  pool: 
-    vmImage: $(vmImageName)
   jobs:
   - deployment: DeploymentJob
+    pool:
+      vmImage: $(vmImageName)
     environment: $(environmentName)
     strategy:
       runOnce:
@@ -72,28 +72,11 @@ stages:
           - task: UsePythonVersion@0
             inputs:
               versionSpec: '$(pythonVersion)'
-            displayName: 'Use Python version $(pythonVersion)'
-
-          - task: AzureAppServiceSettings@1
-            displayName: Update App Service Settings
-            inputs:
-              azureSubscription: $(azureServiceConnectionId)
-              resourceGroupName: $(resourceGroupName)
-              appName: $(webAppName)
-              appSettings: |
-                [
-                  {
-                    "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
-                    "value": false,
-                    "slotSetting": false
-                  }
-                ]
+            displayName: 'Use Python version'
 
           - task: AzureWebApp@1
-            displayName: 'Deploy Azure Web App : $(webAppName)'
+            displayName: 'Deploy Azure Web App : dino-flask-app4'
             inputs:
               azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppName)
-              appType: webAppLinux
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-              startUpCommand: gunicorn -b 0.0.0.0 startup:app
