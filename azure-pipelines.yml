@@ -79,4 +79,4 @@ stages:
               azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppName)
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-              startUpCommand: 'python -m http.server -b 0.0.0.0 8000'
+              startUpCommand: 'python -m http.server -b 0.0.0.0'
